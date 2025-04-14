@@ -30,6 +30,7 @@ npm install
 
 npm run dev
 ```
+Browser access: http://127.0.0.1:5173/
 
 
 # 📚 Features
@@ -106,7 +107,7 @@ npm run dev
 - Draw any polygon
 - Draw any line (unclosed shape simulation)
 - Replace shape
-- Fill color
+- Fill (solid color, gradient, image)
 - Border
 - Shadow
 - Transparency
@@ -145,8 +146,9 @@ npm run dev
 - Color settings
 - Formula line thickness settings
 ### Slide Show
+- Brush tools (pen/shape/arrow/highlighter annotation, eraser, blackboard mode)
 - Preview all slides
-- Pen and blackboard tools
+- Bottom thumbnails navigation
 - Timer tool
 - Laser pointer
 - Auto play
@@ -167,9 +169,10 @@ Some common problems: [FAQ](/doc/Q&A.md)
 
 # 🎯 Supplement
 There is currently no complete development documentation, but the following documents may be of some help to you:
-- [Project Directory and Data Structure](https://github.com/pipipi-pikachu/PPTist/blob/master/doc/DirectoryAndData.md)
-- [Fundamentals of Canvas and Elements](https://github.com/pipipi-pikachu/PPTist/blob/master/doc/Canvas.md)
-- [How to Customize an Element](https://github.com/pipipi-pikachu/PPTist/blob/master/doc/CustomElement.md)
+- [Project Directory and Data Structure](/doc/DirectoryAndData.md)
+- [Fundamentals of Canvas and Elements](/doc/Canvas.md)
+- [How to Customize an Element](/doc/CustomElement.md)
+- [About AIPPT](/doc/AIPPT.md)
 
 Here are some auxiliary development tools/repositories:
 - Import PPTX file reference: [pptxtojson](https://github.com/pipipi-pikachu/pptxtojson)
@@ -180,23 +183,44 @@ Here are some auxiliary development tools/repositories:
 [AGPL-3.0 License](https://github.com/pipipi-pikachu/PPTist/blob/master/LICENSE) | Copyright © 2020-PRESENT [pipipi-pikachu](https://github.com/pipipi-pikachu)
 
 # 🧮 Commercial
-If you wish to use this project for commercial gain, I hope you will respect open source and strictly adhere to the AGPL-3.0 license, giving back to the open source community.
+If you wish to use this project for commercial gain, I hope you will respect open source and strictly adhere to the AGPL-3.0 license, giving back to the open source community. Or contact the author for an independent commercial license.
 
 
 
 
 
 # 🧮 商业用途
-- 注意：本项目禁止闭源商用，如果你希望将PPTist用于商业项目盈利，请尊重开源，**严格遵循 [AGPL-3.0 协议](https://www.gnu.org/licenses/agpl-3.0.html)**，回馈开源社区；
-- 如果你因为任何原因，必须要闭源商用，无法执行 AGPL-3.0 协议，你也可以选择：
-    1. 使用早期的[Apache 2.0 LICENSE 版本](https://github.com/pipipi-pikachu/PPTist/archive/f1a35bb8e045124e37dcafd6acbf40b4531b69aa.zip)；
-    2. 成为项目的重要贡献者（先违反协议后再成为贡献者不在此项范围）；
-        - 你的代码被本项目作为依赖引用；
-        - 你给本项目提交过重要的 PR 并且被合并；
-        - 你长期参与到本项目的维护工作中；
-    3. [邮件联系作者](mailto:pipipi_pikachu@163.com)付费获取商业授权。（注：仅授权，无其他版本和技术支持）
+- 本项目禁止闭源商用，如果你希望将PPTist用于商业项目盈利，请尊重开源，**严格遵循 [AGPL-3.0 协议](https://www.gnu.org/licenses/agpl-3.0.html)**，回馈开源社区；
+- 如果你因为任何原因，必须要闭源商用，无法执行 AGPL-3.0 协议，可以选择：
+    1. 使用早期的 Apache 2.0 协议版本 [（该版本最后更新时间为2022年5月，目前已停止维护，点击此处可下载代码）](https://github.com/pipipi-pikachu/PPTist/archive/f1a35bb8e045124e37dcafd6acbf40b4531b69aa.zip)；
+    2. 成为项目的重要贡献者（先违反协议后再成为贡献者不在此项范围），包括：
+        - 你的代码被本项目作为依赖引用，包括：npm安装、script/style等文件引用、代码片段引用（引用处会注明）；
+        - 你给本项目提交过重要的 PR 并且被合并（由作者主观判断）；
+        - 你长期参与到本项目的维护/推进工作中，如为本项目：提供了有效的周边工具、制作了大量模板等（由作者主观判断）；
+    3. [邮件联系作者](mailto:pipipi_pikachu@163.com)付费获取独立的商业授权。独立授权价格：
+        - 一年1999元（2599可开发票）
+        - 三年2999元（3999可开发票）
+        - 永久5499元（7499可开发票）
+- 如需付费获取独立的商业授权，请注意：
+    - 独立商业授权的意思是：单独授权您将代码用于商业行为，且不必执行 AGPL-3.0 协议；
+    - 仅授权，不存在其他“高级版本/付费版本”、不提供任何在线服务、不提供技术支持和定制开发、不提供更多模板、更无法提供可直接交付的产品；
+    - 如有需要，授权后可提供AIPPT相关后台逻辑和当前模板数据（但都非常简单，无任何核心逻辑，建议自己实现）；
+    - 请务必提前做好调研，判断PPTist是否符合需求（无论功能还是开发）；
+    - 开票仅支持以个人身份开具的电子普票，如介意请考虑慎重考虑；
+    - 作者是异步沟通爱好者，非必要不加微信，有疑问请邮件联系，谢谢理解。
 
-# 👎👎👎 耻辱柱 🤮🤮🤮
-> 👎桌案（西安）信息科技有限公司、西安即刻易用网络科技有限公司 <br> 
-👎产品：Drawon桌案 https://drawon.cn/ <br> 
-👎劣迹：发现违反协议后多次通过邮件和社交平台私信尝试联系沟通，但均已读不回，并在产品官网宣称为自主开发。
+---
+# 🔔 其他说明
+## 什么是 AGPL-3.0 协议
+协议的核心要求用通俗的语言解释如下：
+- **开源义务**：如果你用了 AGPL 的代码，无论你或你的下游怎么使用/修改，都必须把你最终的代码全部完整公开出来（不只是给出修改的部分），并继续以 AGPL 协议开源，保持开源的传染性。
+- **网络服务也要开源**：哪怕你只是用 AGPL 的代码做了一个网站或网络服务，别人通过网络用你的服务时，你也需要遵守上一条**开源义务**。
+- **保留版权声明**：你不能删掉代码里原来的作者信息和许可证声明，得告诉大家这代码是从哪儿来的。
+- **不能加额外限制**：你不能在 AGPL 代码上加一些限制，比如不让别人再分发，或者要求别人付费才能使用代码。
+- **免责声明**：作者不保证代码没有 bug，也不对使用后果负责。
+
+详细协议内容见官方文档：[AGPL-3.0 协议](https://www.gnu.org/licenses/agpl-3.0.html)
+
+## 问题反馈
+- 提需求/报bug/询问技术方案等请在 [Issues](https://github.com/pipipi-pikachu/PPTist/issues) 中进行，而不是邮件；
+- 确保问题的内容不是 [Issues](https://github.com/pipipi-pikachu/PPTist/issues)（特别是置顶 Issues）和 [常见问题](/doc/Q&A.md) 中已经存在的。

@@ -70,7 +70,7 @@ A. 大家都知道，对于一般的插件/库而言，一个封装好的npm包�
 
 #### Q. 关于 AI PPT
 
-A. 目前此功能仅作参考，内部实现了最基础的AIPPT生成逻辑，即：模板定制 + AI生成数据与模板结合 + 配图替换。为控制成本暂时只能做到这里，但为了达到生产环节的效果，你还需要做更多。
+A. 首先需要说明，AIPPT不是PPTist的重点，现在或以后都不是，它只是PPTist众多功能中非常小的一部分而已，并且是比较简单一部分，你可以理解为这只是一个跟风的小功能点，我不想蹭AI的热度，但无奈太多人将AI看得太重要太复杂了，于是我做了这个DEMO（它真的没那么复杂），目前此功能仅作参考，内部实现了最基础的AIPPT生成逻辑，即：模板定制 + AI生成数据与模板结合 + 配图替换。为控制成本暂时只能做到这里，但为了达到生产环节的效果，你还需要做更多，例如更多的模板、更细致的AI工作流程。
 
 注：配图替换仅提供方法，不提供实际演示功能，你需要自己提供图片源接入（如AI文生图、图库搜索匹配等方法）
 
@@ -148,7 +148,7 @@ A. Everyone knows that for general plugins/libraries, a well-packaged NPM packag
 Therefore, the correct way to develop a project using PPTist is to pull the complete code, try to understand it, and modify it to suit your own needs. There are also similar projects in the community, such as [drawio](https://github.com/jgraph/drawio).
 
 #### Q. About AI PPT
-A. Currently, this feature is for reference only. The most basic AI PPT generation logic has been implemented internally, which includes: template customization + AI-generated data combined with templates + image replacement. Due to cost control, we can only go this far for now. However, to achieve the desired production-level results, you will need to do more.
+A. I don't want to ride the wave of AI hype, but it's unavoidable as too many people place too much importance on AI. So, I created this DEMO (it's really not that complicated). Currently, this feature is for reference only, and internally, it implements the most basic AI PPT generation logic, which is: template customization + AI-generated data combined with templates + image replacement. To control costs, we can only go this far for now. However, to achieve the effect of a production environment, you would need to do more, such as creating more templates and refining the AI workflow.
 
 Note: Image replacement only provides the method and does not offer an actual demonstration function. You will need to provide your own image sources (such as AI text-to-image generation, image library search matching, etc.).
 

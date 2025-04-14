@@ -62,6 +62,7 @@
       <div class="row">
         <GradientBar
           :value="background.gradient?.colors || []"
+          :index="currentGradientIndex"
           @update:value="value => updateGradientBackground({ colors: value })"
           @update:index="index => currentGradientIndex = index"
         />
@@ -98,9 +99,8 @@
     <Divider />
 
     <div class="row">
-      <div style="width: 40%;">画布尺寸：</div>
       <Select 
-        style="width: 60%;" 
+        style="width: 100%;" 
         :value="viewportRatio" 
         @update:value="value => updateViewportRatio(value as number)"
         :options="[
@@ -111,6 +111,10 @@
           { label: '竖向 A3 / A4', value: 1.41421356 },
         ]"
       />
+    </div>
+
+    <div class="row">
+      <div class="canvas-size">画布尺寸：{{  viewportSize  }} × {{ toFixed(viewportSize * viewportRatio) }}</div>
     </div>
 
     <Divider />
@@ -160,15 +164,7 @@
     </div>
     <div class="row">
       <div style="width: 40%;">主题色：</div>
-      <Popover trigger="click" style="width: 60%;">
-        <template #content>
-          <ColorPicker
-            :modelValue="theme.themeColor"
-            @update:modelValue="value => updateTheme({ themeColor: value })"
-          />
-        </template>
-        <ColorButton :color="theme.themeColor" />
-      </Popover>
+      <ColorListButton style="width: 60%;" :colors="theme.themeColors" @click="themeColorsSettingVisible = true" />
     </div>
     
     <template v-if="moreThemeConfigsVisible">
@@ -280,8 +276,8 @@
           </div>
 
           <div class="btns">
-            <Button type="primary" size="small" @click="applyPresetThemeToSingleSlide(item)">应用</Button>
-            <Button type="primary" size="small" style="margin-top: 3px;" @click="applyPresetThemeToAllSlides(item)">应用全局</Button>
+            <Button type="primary" size="small" @click="applyPresetTheme(item)">应用</Button>
+            <Button type="primary" size="small" style="margin-top: 3px;" @click="applyPresetTheme(item, true)">应用全局</Button>
           </div>
         </div>
       </div>
@@ -295,10 +291,18 @@
   >
     <ThemeStylesExtract @close="themeStylesExtractVisible = false" />
   </Modal>
+
+  <Modal
+    v-model:visible="themeColorsSettingVisible" 
+    :width="310"
+    @closed="themeColorsSettingVisible = false"
+  >
+    <ThemeColorsSetting @close="themeColorsSettingVisible = false" />
+  </Modal>
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useSlidesStore } from '@/store'
 import type { 
@@ -318,8 +322,10 @@ import useSlideTheme from '@/hooks/useSlideTheme'
 import { getImageDataURL } from '@/utils/image'
 
 import ThemeStylesExtract from './ThemeStylesExtract.vue'
-import SVGLine from './common/SVGLine.vue'
+import ThemeColorsSetting from './ThemeColorsSetting.vue'
+import SVGLine from '../common/SVGLine.vue'
 import ColorButton from '@/components/ColorButton.vue'
+import ColorListButton from '@/components/ColorListButton.vue'
 import FileInput from '@/components/FileInput.vue'
 import ColorPicker from '@/components/ColorPicker/index.vue'
 import Divider from '@/components/Divider.vue'
@@ -333,10 +339,11 @@ import Modal from '@/components/Modal.vue'
 import GradientBar from '@/components/GradientBar.vue'
 
 const slidesStore = useSlidesStore()
-const { slides, currentSlide, viewportRatio, theme } = storeToRefs(slidesStore)
+const { slides, currentSlide, slideIndex, viewportRatio, viewportSize, theme } = storeToRefs(slidesStore)
 
 const moreThemeConfigsVisible = ref(false)
 const themeStylesExtractVisible = ref(false)
+const themeColorsSettingVisible = ref(false)
 const currentGradientIndex = ref(0)
 const lineStyleOptions = ref<LineStyleType[]>(['solid', 'dashed', 'dotted'])
 
@@ -352,10 +359,13 @@ const background = computed(() => {
 
 const { addHistorySnapshot } = useHistorySnapshot()
 const {
-  applyPresetThemeToSingleSlide,
-  applyPresetThemeToAllSlides,
+  applyPresetTheme,
   applyThemeToAllSlides,
 } = useSlideTheme()
+
+watch(slideIndex, () => {
+  currentGradientIndex.value = 0
+})
 
 // 设置背景模式：纯色、图片、渐变色
 const updateBackgroundType = (type: SlideBackgroundType) => {
@@ -448,6 +458,13 @@ const updateTheme = (themeProps: Partial<SlideTheme>) => {
 const updateViewportRatio = (value: number) => {
   slidesStore.setViewportRatio(value)
 }
+
+const toFixed = (num: number) => {
+  if (num % 1 !== 0) {
+    return parseFloat(num.toFixed(1))
+  } 
+  return Math.floor(num)
+}
 </script>
 
 <style lang="scss" scoped>
@@ -501,6 +518,12 @@ const updateViewportRatio = (value: number) => {
     background-repeat: no-repeat;
     cursor: pointer;
   }
+}
+.canvas-size {
+  width: 100%;
+  color: #888;
+  font-size: 12px;
+  text-align: center;
 }
 
 .theme-list {

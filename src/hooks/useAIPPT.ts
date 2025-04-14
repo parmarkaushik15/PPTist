@@ -6,7 +6,7 @@ import { useSlidesStore } from '@/store'
 import useAddSlidesOrElements from './useAddSlidesOrElements'
 import useSlideHandler from './useSlideHandler'
 
-interface PexelsImage {
+interface ImgPoolItem {
   id: string
   src: string
   width: number
@@ -18,7 +18,9 @@ export default () => {
   const { addSlidesFromData } = useAddSlidesOrElements()
   const { isEmptySlide } = useSlideHandler()
 
-  const imgPool = ref<PexelsImage[]>([])
+  const imgPool = ref<ImgPoolItem[]>([])
+  const transitionIndex = ref(0)
+  const transitionTemplate = ref<Slide | null>(null)
 
   const checkTextType = (el: PPTElement, type: TextType) => {
     return (el.type === 'text' && el.textType === type) || (el.type === 'shape' && el.text && el.text.type === type)
@@ -167,8 +169,8 @@ export default () => {
     return el.type === 'text' ? { ...el, content, lineHeight: size < 15 ? 1.2 : el.lineHeight } : { ...el, text: { ...el.text!, content } }
   }
 
-  const getUseableImage = (el: PPTImageElement): PexelsImage | null => {
-    let img: PexelsImage | null = null
+  const getUseableImage = (el: PPTImageElement): ImgPoolItem | null => {
+    let img: ImgPoolItem | null = null
   
     let imgs = []
   
@@ -217,8 +219,17 @@ export default () => {
     if (match) return match[1].trim()
     return content.replace('```markdown', '').replace('```', '')
   }
+  
+  const getJSONContent = (content: string) => {
+    const regex = /```json([^```]*)```/
+    const match = content.match(regex)
+    if (match) return match[1].trim()
+    return content.replace('```json', '').replace('```', '')
+  }
 
-  const AIPPT = (templateSlides: Slide[], _AISlides: AIPPTSlide[], imgs?: PexelsImage[]) => {
+  const AIPPT = (templateSlides: Slide[], _AISlides: AIPPTSlide[], imgs?: ImgPoolItem[]) => {
+    slidesStore.updateSlideIndex(slidesStore.slides.length - 1)
+
     if (imgs) imgPool.value = imgs
 
     const AISlides: AIPPTSlide[] = []
@@ -300,16 +311,16 @@ export default () => {
     const contentTemplates = templateSlides.filter(slide => slide.type === 'content')
     const endTemplates = templateSlides.filter(slide => slide.type === 'end')
 
-    const coverTemplate = coverTemplates[Math.floor(Math.random() * coverTemplates.length)]
-    const transitionTemplate = transitionTemplates[Math.floor(Math.random() * transitionTemplates.length)]
-    const endTemplate = endTemplates[Math.floor(Math.random() * endTemplates.length)]
+    if (!transitionTemplate.value) {
+      const _transitionTemplate = transitionTemplates[Math.floor(Math.random() * transitionTemplates.length)]
+      transitionTemplate.value = _transitionTemplate
+    }
 
     const slides = []
-
-    let transitionIndex = 0
     
     for (const item of AISlides) {
       if (item.type === 'cover') {
+        const coverTemplate = coverTemplates[Math.floor(Math.random() * coverTemplates.length)]
         const elements = coverTemplate.elements.map(el => {
           if (el.type === 'image' && el.imageType && imgPool.value.length) return getNewImgElement(el)
           if (el.type !== 'text' && el.type !== 'shape') return el
@@ -367,8 +378,8 @@ export default () => {
         })
       }
       else if (item.type === 'transition') {
-        transitionIndex++
-        const elements = transitionTemplate.elements.map(el => {
+        transitionIndex.value = transitionIndex.value + 1
+        const elements = transitionTemplate.value.elements.map(el => {
           if (el.type === 'image' && el.imageType && imgPool.value.length) return getNewImgElement(el)
           if (el.type !== 'text' && el.type !== 'shape') return el
           if (checkTextType(el, 'title') && item.data.title) {
@@ -378,12 +389,12 @@ export default () => {
             return getNewTextElement({ el, text: item.data.text, maxLine: 3 })
           }
           if (checkTextType(el, 'partNumber')) {
-            return getNewTextElement({ el, text: transitionIndex + '', maxLine: 1, digitPadding: true })
+            return getNewTextElement({ el, text: transitionIndex.value + '', maxLine: 1, digitPadding: true })
           }
           return el
         })
         slides.push({
-          ...transitionTemplate,
+          ...transitionTemplate.value,
           id: nanoid(10),
           elements,
         })
@@ -462,6 +473,7 @@ export default () => {
         })
       }
       else if (item.type === 'end') {
+        const endTemplate = endTemplates[Math.floor(Math.random() * endTemplates.length)]
         const elements = endTemplate.elements.map(el => {
           if (el.type === 'image' && el.imageType && imgPool.value.length) return getNewImgElement(el)
           return el
@@ -480,5 +492,6 @@ export default () => {
   return {
     AIPPT,
     getMdContent,
+    getJSONContent,
   }
 }

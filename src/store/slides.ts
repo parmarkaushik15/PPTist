@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
-import tinycolor from 'tinycolor2'
 import { omit } from 'lodash'
-import type { Slide, SlideTheme, PPTElement, PPTAnimation } from '@/types/slides'
+import type { Slide, SlideTheme, PPTElement, PPTAnimation, SlideTemplate } from '@/types/slides'
 
 interface RemovePropData {
   id: string
@@ -26,14 +25,14 @@ export interface SlidesState {
   slideIndex: number
   viewportSize: number
   viewportRatio: number
-  _layouts: Slide[]
+  templates: SlideTemplate[]
 }
 
 export const useSlidesStore = defineStore('slides', {
   state: (): SlidesState => ({
     title: '未命名演示文稿', // 幻灯片标题
     theme: {
-      themeColor: '#5b9bd5',
+      themeColors: ['#5b9bd5', '#ed7d31', '#a5a5a5', '#ffc000', '#4472c4', '#70ad47'],
       fontColor: '#333',
       fontName: '',
       backgroundColor: '#fff',
@@ -53,7 +52,12 @@ export const useSlidesStore = defineStore('slides', {
     slideIndex: 0, // 当前页面索引
     viewportSize: 1000, // 可视区域宽度基数
     viewportRatio: 0.5625, // 可视区域比例，默认16:9
-    _layouts: [], // 布局模板
+    templates: [
+      { name: '红色通用', id: 'template_1', cover: 'https://asset.pptist.cn/img/template_1.jpg' },
+      { name: '蓝色通用', id: 'template_2', cover: 'https://asset.pptist.cn/img/template_2.jpg' },
+      { name: '紫色通用', id: 'template_3', cover: 'https://asset.pptist.cn/img/template_3.jpg' },
+      { name: '莫兰迪配色', id: 'template_4', cover: 'https://asset.pptist.cn/img/template_4.jpg' },
+    ], // 模板
   }),
 
   getters: {
@@ -101,26 +105,6 @@ export const useSlidesStore = defineStore('slides', {
       }
       return formatedAnimations
     },
-  
-    layouts(state) {
-      const {
-        themeColor,
-        fontColor,
-        fontName,
-        backgroundColor,
-      } = state.theme
-  
-      const subColor = tinycolor(fontColor).isDark() ? 'rgba(230, 230, 230, 0.5)' : 'rgba(180, 180, 180, 0.5)'
-  
-      const layoutsString = JSON.stringify(state._layouts)
-        .replace(/{{themeColor}}/g, themeColor)
-        .replace(/{{fontColor}}/g, fontColor)
-        .replace(/{{fontName}}/g, fontName)
-        .replace(/{{backgroundColor}}/g, backgroundColor)
-        .replace(/{{subColor}}/g, subColor)
-      
-      return JSON.parse(layoutsString)
-    },
   },
 
   actions: {
@@ -145,8 +129,8 @@ export const useSlidesStore = defineStore('slides', {
       this.slides = slides
     },
   
-    setLayouts(layouts: Slide[]) {
-      this._layouts = layouts
+    setTemplates(templates: SlideTemplate[]) {
+      this.templates = templates
     },
   
     addSlide(slide: Slide | Slide[]) {
